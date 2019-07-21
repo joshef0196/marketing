@@ -9,7 +9,7 @@
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
-                    <p style="font-size:20px;"{% if message.tags %} class="{{ message.tags }}"{% endif %}>* {{ message }}</p>
+                    <p style="font-size:20px; color:red;"{% if message.tags %} class="{{ message.tags }}"{% endif %}>* {{ message }}</p>
                 {% endfor %}
             </div>
         {% endif %}
@@ -34,7 +34,7 @@
         <tr>
             <td>Address</td>
             <td>
-                <textarea rows="4" cols="50" class="form-control"></textarea>
+                <textarea rows="4" name="address" cols="50" class="form-control"></textarea>
             </td>
         </tr>
 
