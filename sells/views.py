@@ -12,6 +12,14 @@ def admin_dashboard(request):
     
     return render(request,'sells/admin/index.html')
 
+def admin_product_add(request):
+    
+    return render(request,'sells/admin/add_product.html')
+
+def product_list(request):
+    
+    return render(request,'sells/admin/product_list.html')
+
 def registration(request):
     if request.method=="POST":
         name          = request.POST['name']

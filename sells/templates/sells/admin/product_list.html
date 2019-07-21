@@ -1,0 +1,95 @@
+{% extends 'sells/admin/base.html' %}
+{% block title %} Add Room Wise Seat Assign {% endblock %}
+{% load staticfiles %}
+{% block contain %}
+
+<div class="page_content_wrapping">
+    <div class="portlet-title">
+        <div class="row">
+            <div class="col-md-8">
+                <a class="caption-subject bold" style="font-weight: 600 !important;" href="/product-add/" >
+                    <i class="fa fa-thumb-tack"></i>
+                    <span class="caption-subject bold">Add Product</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <div class="actions" style="text-align: right;">
+                    <i class="fa fa-hand-o-right"></i>
+                    <span class="caption-subject bold" >
+                        <a class="caption-subject bold" style="font-weight: 600 !important;" href="/product-list/">
+                            Go to Product List
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div><hr>
+    <table class="table table-bordered table-hover" style="font-size: 13px;">
+        <thead>
+            <tr>
+                <th class="center"style="width:40px;">SL</th>     
+                <th style="text-align:center;">Match</th>                 
+                <th>Quantity</th>
+                <th>Your Team</th>
+                <th>Order Time</th>
+                <th>Winning Team</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for data in product_list %}
+                <tr class="gradeX odd" role="row">
+                    <td> {{ forloop.counter }} </td>
+                    <td> {{ data.match.team1}} Vs {{ data.match.team2}}</td>
+                    <td> {{ data.bit_amount }} </td>
+                    <td> {{ data.bit_team  }}  ({{ data.get_product_type_display }}) </td>
+                    <td> {{ data.bit_date }} </td>
+                    <td> 
+                        {% if data.product_type == "1" %}
+                            {% if data.winning_team_match %}
+                                {{ data.winning_team_match }} (Match)
+                            {% else %}
+                                {{ data.winning_team_match }}
+                            {% endif %}
+                        {% else %}
+                            {% if data.winning_team_toss %}
+                                {{ data.winning_team_toss }} (Toss)
+                            {% else %}
+                                {{ data.winning_team_toss }}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+
+        <tbody>
+            {% for data in toss_list %}
+                <tr class="gradeX odd" role="row">
+                    <td style="color:red;font-size:15px;"> {{ forloop.counter }} </td>
+                    <td> {{ data.match.team1}} Vs {{ data.match.team2}}</td>
+                    <td> {{ data.bit_amount }} </td>
+                    <td> {{ data.bit_team }}  ({{ data.get_product_type_display }}) </td>
+                    <td> {{ data.bit_date }} </td>
+                    <td> 
+                        {% if data.product_type == "1" %}
+                            {% if data.winning_team_match %}
+                                {{ data.winning_team_match }} (Match)
+                            {% else %}
+                                {{ data.winning_team_match }}
+                            {% endif %}
+                        {% else %}
+                            {% if data.winning_team_toss %}
+                                {{ data.winning_team_toss }} (Toss)
+                            {% else %}
+                                {{ data.winning_team_toss }}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
