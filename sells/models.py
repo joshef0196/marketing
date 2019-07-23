@@ -32,14 +32,16 @@ class ProductCat(models.Model):
 class Product(models.Model):
     category_name        = models.ForeignKey(ProductCat, on_delete=models.CASCADE)
     product_name         = models.CharField(max_length=100)
-    brand_name           = models.CharField(max_length=150)
-    product_model_number = models.CharField(max_length=100)
+    brand_name           = models.CharField(max_length=150, blank=True)
+    product_model_number = models.CharField(max_length=100, blank=True)
     product_color        = models.CharField(max_length=50, blank=True)
-    quantity             = models.IntegerField(default=1)
-    per_product_price    = models.FloatField(default=0)
+    available_quantity   = models.IntegerField(default=1)
+    total_quantity       = models.IntegerField(default=1)
+    unit_price           = models.FloatField(default=0)
     total_price          = models.FloatField(default=0)
+    buy_price            = models.FloatField(default=0)
     discount             = models.FloatField(default=0, blank=True)
-    product_place        = models.CharField(max_length=150, blank=True)
+    discription          = RichTextField(blank=True)
     status               = models.BooleanField(default=True)
 
     def __str__(self):
@@ -48,3 +50,20 @@ class Product(models.Model):
     class Meta:
         verbose_name        ='Product'
         verbose_name_plural ='Products'
+
+class SalesProduct(models.Model):
+    salesman             = models.ForeignKey(Registration, on_delete=models.CASCADE)
+    product              = models.ForeignKey(Product, on_delete=models.CASCADE)
+    unit_price           = models.FloatField(default=0)
+    total_price          = models.FloatField(default=0)
+    sale_quantity        = models.IntegerField(default=1)
+    discount             = models.FloatField(default=0, blank=True)
+    sale_date            = models.DateTimeField(auto_now_add=True)
+    status               = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.salesman)
+
+    class Meta:
+        verbose_name        ='Sales Product'
+        verbose_name_plural ='Sales Products'

@@ -1774,3 +1774,47 @@ ul.activity-timeline > li {
   border-color: #d0d0d0;
   background-color: #f3f0f0 ;
 } */
+
+.dashboard_box {
+  background: rgb(234, 234, 234);;
+  box-shadow: 0px 0px 3px #484b4e;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 18px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 3px solid #919ba5;
+  border-right: 1px solid #919ba5;
+  height: 107px;
+}
+
+.dashboard_box:hover{
+  background: rgb(247, 246, 246);
+}
+.dashboard_box h5{
+ margin:0px;text-align: center;
+ color:#484b4e;
+}
+.dashboard_box h5 span{
+  font-size: 15px;color:#484b4e;
+}
+.dashboard_box h3 {
+  margin-top: 10px;
+  text-align: center;
+  color: #484b4e;
+  font-family: osan;
+  font-weight: bold;
+  font-size: 17px;
+}
+.dashboard_box h4{
+  margin:0px;text-align: center;color:#484b4e;
+  font-family: osan;
+  font-weight: bold;
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 0; 
+  border-top: 1px solid #eee;
+}

@@ -1,0 +1,86 @@
+/* All styles created for demo purposes only, you may not need this for your project */
+.demo-button button {
+  margin-bottom: 5px; }
+
+.demo-icons li {
+  margin-bottom: 50px;
+  text-align: center; }
+
+.demo-icons .lnr,
+.demo-icons .fa {
+  font-size: 28px; }
+
+.demo-icons .cssclass {
+  display: block;
+  margin-top: 5px;
+  margin-left: 5px; }
+
+/*# sourceMappingURL=demo.css.map */
+
+
+.team_name_area{
+  overflow: hidden;
+  padding:4px;
+  margin-bottom:20px;
+}
+.team_name_area h4 {
+  text-align: center;
+  margin: 0px;
+  padding: 8px;
+  font-size: 21px;
+  color: #0c101d;
+}
+.team_name_area a {
+  text-align: center;
+  border: 1px solid #098;
+  padding: 10px;
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  color: #585858;
+  background: #edf7f6;
+  font-weight: bold;
+  font-size: 16px;
+}
+.team_name_area a:hover{
+  background: #289a8e;
+  color:#fff;
+}
+#border{
+  border: 1px solid #383a39;
+  background: #128fea96;
+  margin-bottom: 9px;
+  width: 285px;
+  margin-right: 14px;
+  border-radius: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 767px)
+.navbar-nav > li {
+    display: table-cell;
+    width: 0% !important;
+    position: inherit;
+    text-align: center;
+}

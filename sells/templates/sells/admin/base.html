@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="{% static 'sells/assets/vendor/bootstrap/css/bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'sells/assets/vendor/font-awesome/css/font-awesome.min.css' %}">
 	<link rel="stylesheet" href="{% static 'sells/assets/vendor/linearicons/style.css' %}">
+	{% comment %} <link rel="stylesheet" href="{% static 'sells/dashboard/css/main.css' %}"> {% endcomment %}
 	<link rel="stylesheet" href="{% static 'sells/assets/vendor/chartist/css/chartist-custom.css' %}">
 	<!-- Login -->
 	<!-- MAIN CSS -->
@@ -30,7 +31,7 @@
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a href="index.html"><img src="{% static 'sells/assets/img/logo-dark.png' %}" alt="Klorofil Logo" class="img-responsive logo"></a>
+				<a href="/admin-dashboard/"><img src="{% static 'sells/assets/img/logo-dark.png' %}" alt="Klorofil Logo" class="img-responsive logo"></a>
 			</div>
 			<div class="container-fluid">
 				<div class="navbar-btn">
@@ -59,12 +60,12 @@
 							</ul>
 						</li>
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{% static 'sells/assets/img/user.png' %}" class="img-circle" alt="Avatar"> <span>Samuel</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{% static 'sells/assets/img/user.png' %}" class="img-circle" alt="Avatar"> <span>{{ request.session.user }}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
 								<li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
-								<li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+								<li><a href="/"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
 							</ul>
 						</li>
 					</ul>
@@ -84,9 +85,9 @@
 							<a href="#subPages" data-toggle="collapse" class="collapsed"><i class="fa fa-flag"></i> <span>Report</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 							<div id="subPages" class="collapse ">
 								<ul class="nav">
-									<li><a href="page-profile.html" class=""><i class="fa fa-hand-o-right"></i>Date Wise Report</a></li>
-									<li><a href="page-profile.html" class=""><i class="fa fa-hand-o-right"></i>Weekly Report</a></li>
-									<li><a href="page-profile.html" class=""><i class="fa fa-hand-o-right"></i>Monthly Report</a></li>
+									<li><a href="/daily-report/" class="" target="_blank_"><i class="fa fa-hand-o-right"></i>Daily Report</a></li>
+									<li><a href="/weekly-report/" class="" target="_blank_"><i class="fa fa-hand-o-right"></i>Weekly Report</a></li>
+									<li><a href="/monthly-report/" class="" target="_blank_"><i class="fa fa-hand-o-right"></i>Monthly Report</a></li>
 								</ul>
 							</div>
 						</li>

@@ -1,0 +1,50 @@
+<html>
+     <head>
+         <title>Daily Report</title>
+         <meta charset="utf-8" />
+     </head>
+     <body>
+      <div class='wrapper'> 
+        <table style="background-color: #eee;">
+            <tr>
+                <td style="width:100%; margin-left:-90px;">
+                    <h1 style="margin:0px;text-align:center;padding-top:30px;font-size:24px;">RanaShop</h1>
+                    <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">Daily Report</h4>
+                </td>
+            </tr>
+        </table>
+
+        <table border="0.5" width="100%" style="margin-top:10px">
+            <thead>
+                <tr>
+                    <th style="width:40px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">SL</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Customer name</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Product Name</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Category</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Price</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Quantity</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Payment Type</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Payment Number</th>
+                    <th style="width:60px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Order Date</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for st in order_list %}
+                <tr class="gradeX odd" role="row">
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{ forloop.counter }} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px;padding-left:3px">  {{st.customer_name}}</td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{st.product_name }} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.category}} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.price}} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.quantity}} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {% if st.payment_type == "b" %} bKash {% elif st.payment_type == "d"%} Rocket {% endif %}</td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.payment_number}} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.order_date}} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+     </body>
+ </html>

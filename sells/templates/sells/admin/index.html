@@ -2,5 +2,31 @@
 {% block title %} Dashboard|Home {% endblock %}
 {% load staticfiles %}
 {% block contain %}
-
+<div class="panel-headline">
+	<div class="page_body_wraping">
+		<div class="col-sm-3">
+			<div class="dashboard_box">
+				<h5><span class="fa fa-usd"></span></h5>
+				<h3>Today Sale</h3>
+				<h4>[ Tk. 2500 ]</h4>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="dashboard_box">
+				<h5><span class="fa fa-usd"></span></h5>
+				<h3>Today Profit</h3>
+				<h4>[ Tk. 500 ]</h4>
+			</div>
+		</div>
+		<a href="/registration">
+			<div class="col-sm-3">
+				<div class="dashboard_box">
+					<h5><span class="fa fa-user-plus"></span></h5>
+					<h3>Registration</h3>
+					<h4>Create new account</h4>
+				</div>
+			</div>
+		</a>
+	</div>
+</div>
 {% endblock %}

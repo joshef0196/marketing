@@ -349,7 +349,7 @@ h1.header-w3ls {
 }
 
 .form-left-w3l input[type="password"],
-.form-left-w3l input[type="number"] {
+.form-left-w3l input[type="text"] {
     width: 100%;
     color: #fff;
     outline: none;
