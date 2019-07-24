@@ -3,6 +3,7 @@ from django.urls import path
 
 urlpatterns = [
     path('',views.login),
+    path('logout/',views.logout),
 
     #.............. for salesman.................
     path('dashboard/',views.salesman_dashboard),
@@ -10,6 +11,7 @@ urlpatterns = [
     #.............. for admin....................
     path('admin-dashboard/',views.admin_dashboard),
     path('product-add/',views.admin_product_add),
+    path('edit/<int:id>/',views.edit_product),
     path('product-list/',views.product_list),
     path('salesman-registration/',views.registration),
 

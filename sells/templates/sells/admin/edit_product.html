@@ -1,5 +1,5 @@
 {% extends 'sells/admin/base.html' %}
-{% block title %} Add Room Wise Seat Assign {% endblock %}
+{% block title %} Edit  {% endblock %}
 {% load staticfiles %}
 {% block contain %}
     <div class="row">
@@ -40,74 +40,74 @@
                                 <td>
                                     <select name="product_cat" class="form-control select" required> 
                                         {% for data in product_cat %}    
-                                            {% if category_name == data.pk %}
-                                                <option value="{{ data.pk }}" selected >{{ data.category_name }}</option> 
+                                            {% if edit_product.category_name_id == data.pk %}
+                                                <option value="{{ data.id }}" selected >{{ data.category_name }}</option> 
                                             {% else %}
-                                                <option value="{{ data.pk }}">{{ data.category_name }}</option> 
+                                                <option value="{{ data.id }}">{{ data.category_name }}</option> 
                                             {% endif %}
-                                        {% endfor %}
+                                        {% endfor %} 
                                     </select>
                                 </td> 
                             </tr>
                             <tr>
                                 <td class="label_center">Product Name </td>
                                 <td>
-                                    <input type="text" placeholder="Product Name" name="product_name" class="form-control select" required>
+                                    <input type="text" value="{{edit_product.product_name}}" placeholder="Product Name" name="product_name" class="form-control select" required>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center"> Brand Name </td>
                                 <td>
-                                    <input type="text" placeholder="Brand Name" name="brand_name" class="form-control select">
+                                    <input type="text" value="{{edit_product.brand_name}}" placeholder="Brand Name" name="brand_name" class="form-control select">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center">Product Model Number</td>
                                 <td>
-                                    <input type="text" placeholder="Product Model Number" name="product_model_number" class="form-control select">
+                                    <input type="text" value="{{edit_product.product_model_number}}" placeholder="Product Model Number" name="product_model_number" class="form-control select">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center">Product Color</td>
                                 <td>
-                                    <input type="text" placeholder="Product Color" name="product_color" class="form-control select">
+                                    <input type="text" value="{{edit_product.product_color}}" placeholder="Product Color" name="product_color" class="form-control select">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center">Unit Price</td>
                                 <td>
-                                    <input type="number" placeholder="Unit Price" name="unit_price" class="form-control select">
+                                    <input type="number" value="{{edit_product.unit_price}}" placeholder="Unit Price" name="unit_price" class="form-control select" required>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center">Total Quantity</td>
                                 <td>
-                                    <input type="number" placeholder="Total Quantity" name="total_quantity" class="form-control select">
+                                    <input type="number" value="{{edit_product.total_quantity}}" placeholder="Total Quantity" name="total_quantity" class="form-control select" required>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center">Buy Price</td>
                                 <td>
-                                    <input type="number" placeholder="Buy Price" name="buy_price" class="form-control select">
+                                    <input type="number" value="{{edit_product.buy_price}}" placeholder="Buy Price" name="buy_price" class="form-control select" required>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center">Discount</td>
                                 <td>
-                                    <input type="number" placeholder="Discount" name="discount" class="form-control select">
+                                    <input type="number" value="{{edit_product.discount}}" placeholder="Discount" name="discount" class="form-control select">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label_center"> Discription </td>
                                 <td>
-                                    <textarea name="discription" class="form-control select"></textarea>
+                                    <textarea name="discription" class="form-control select"> {{ edit_product.discription|linebreaks }} </textarea>
                                 </td>
                             </tr> 
 
                             <tr>
                                 <th></th>
                                 <td>
-                                    <input type="submit" value="Save" class="btn btn-success"/>
+                                    <input type="submit" value="Update" class="btn btn-success"/>
                                 </td>
                             </tr>
                         </table>

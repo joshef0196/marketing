@@ -450,14 +450,14 @@ ul.list-justify > li {
   box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.1);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 4px;
   border-color: #eaeaea;
-  background-color: #fcfcfc; }
+  background-color: #eceaea; }
   .form-control:focus {
     -moz-box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.1);
     box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.1);
-    border-color: #d6d6d6;
+    border-color: #da1212;
     background-color: #fff; }
 
 .input-group {

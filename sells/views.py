@@ -12,27 +12,83 @@ def salesman_dashboard(request):
     return render(request,'sells/salesman/index.html')
 
 def admin_dashboard(request):
-    if not request.session['user']:
+    if not request.session['usertype'] == "admin":
         return redirect('/')
 
     return render(request,'sells/admin/index.html')
 
 def admin_product_add(request):
-    if not request.session['user']:
+    if not request.session['usertype'] == "admin":
         return redirect('/')
-    product_cat = models.ProductCat.objects.all()
+
+    product_cat = models.ProductCat.objects.all().order_by("category_name")
     context = {
         'product_cat': product_cat,       
     }
+    if request.method=="POST":
+        product_cat          = int(request.POST['product_cat'])
+        product_name         = request.POST['product_name']
+        brand_name           = request.POST['brand_name']
+        product_model_number = request.POST['product_model_number']
+        product_color        = request.POST['product_color']
+        unit_price           = request.POST['unit_price']
+        total_quantity       = request.POST['total_quantity']
+        buy_price            = request.POST['buy_price']
+        discount             = request.POST['discount']
+        discription          = request.POST['discription']
+        total_price          = round((int(total_quantity)*float(unit_price)),2)
+        if models.Product.objects.create(
+            category_name_id = product_cat, product_name = product_name, brand_name = brand_name, product_model_number = product_model_number,product_color = product_color,
+            unit_price = unit_price, total_quantity = total_quantity, available_quantity = total_quantity, buy_price = buy_price,
+            discount = discount, total_price = total_price, discription = discription):
+            return redirect("/product-list/")
+        else:
+            return redirect("/product-add/") 
     return render(request,'sells/admin/add_product.html',context)
 
 def product_list(request):
-    if not request.session['user']:
+    if not request.session['usertype'] == "admin":
         return redirect('/')
 
-    return render(request,'sells/admin/product_list.html')
+    product = models.Product.objects.filter(status = True).order_by("id")
+    context = {
+        'product': product,       
+    }
+    return render(request,'sells/admin/product_list.html',context)
+
+def edit_product(request,id):
+    if not request.session['usertype'] == "admin":
+        return redirect('/')
+
+    context={
+        'edit_product': models.Product.objects.filter(id = id).first(),
+        'product_cat': models.ProductCat.objects.filter(status = True),
+    }
+    if request.method=="POST":
+        product_cat          = int(request.POST['product_cat'])
+        product_name         = request.POST['product_name']
+        brand_name           = request.POST['brand_name']
+        product_model_number = request.POST['product_model_number']
+        product_color        = request.POST['product_color']
+        unit_price           = request.POST['unit_price']
+        total_quantity       = request.POST['total_quantity']
+        buy_price            = request.POST['buy_price']
+        discount             = request.POST['discount']
+        discription          = request.POST['discription']
+        total_price          = round((int(total_quantity)*float(unit_price)),2)
+        
+        models.Product.objects.filter(id = id).update(category_name_id = product_cat, product_name = product_name, brand_name = brand_name, product_model_number = product_model_number,product_color = product_color,
+            unit_price = unit_price, total_quantity = total_quantity, available_quantity = total_quantity, buy_price = buy_price,
+            discount = discount, total_price = total_price, discription = discription)
+        return redirect("/product-list/")
+
+    return render(request,'sells/admin/edit_product.html',context)
+
 
 def registration(request):
+    if not request.session['usertype'] == "admin":
+        return redirect('/')
+
     if request.method=="POST":
         name          = request.POST['name']
         email         = request.POST['email']
