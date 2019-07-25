@@ -6,7 +6,9 @@ urlpatterns = [
     path('logout/',views.logout),
 
     #.............. for salesman.................
-    path('dashboard/',views.salesman_dashboard),
+    path('all-product-list/',views.sales_product_list),
+    path('add-sales-product/',views.add_selling_product),
+    path('category/product-load/',views.load_category_product),
 
     #.............. for admin....................
     path('admin-dashboard/',views.admin_dashboard),

@@ -1,0 +1,101 @@
+{% extends 'sells/salesman/base.html' %}
+{% block title %} Product List{% endblock title %}
+{% load staticfiles %}
+{% block contain %}
+
+<div class="page_content_wrapping">
+    <div class="portlet-title">
+        <div class="row">
+            <div class="col-md-2">
+                <a class="caption-subject bold" style="font-weight: 600 !important;" href="/add-sales-product/" >
+                    <i class="fa fa-hand-o-right"></i>
+                    <span class="caption-subject bold">Add Product</span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <form class=" navbar-center" method="post"> {% csrf_token %}
+					<div class="input-group">
+						<input type="text" name="searchtxt" class="form-control" placeholder="Search product Name & Category...">
+						<span class="input-group-btn"><input type="submit" style="background:gray;" class="btn btn-info button4" value="Search"> <i class="fa fa-search"></i></span>
+					</div>
+				</form>
+            </div>
+            <div class="col-md-4">
+                <div class="actions" style="text-align: right;">
+                    <i class="fa fa-hand-o-right"></i>
+                    <span class="caption-subject bold" >
+                        <a class="caption-subject bold" style="font-weight: 600 !important;" href="/dashboard/">
+                            Go to Product List
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div><hr>
+    <table class="table table-bordered table-hover" style="font-size: 13px;">
+        <thead>
+            <tr>
+                <th class="center"style="width:40px;">SL</th>     
+                <th>Category Name</th>                 
+                <th>Product Name</th>
+                <th>Brand Name </th>
+                <th>Product Model Number</th>
+                <th>Product Color</th>
+                <th style="color:red;">Available Quantity</th>
+                <th style="color:red;">Total Quantity</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+                <th>Buy Price</th>
+                <th>Discount</th>
+            </tr>
+        </thead>
+        {% if product %}
+            <tbody>
+                {% for data in product %}
+                    <tr class="gradeX odd" style="background:white;" role="row">
+                        <td> {{ forloop.counter }} </td>
+                        <td> {{ data.category_name}}</td>
+                        <td> {{ data.product_name }} </td>
+                        {% if data.brand_name %}<td> {{ data.brand_name }} </td>{% else %}<td>---</td>{% endif %}
+                        {% if data.product_model_number %}<td> {{ data.product_model_number }} </td>{% else %}<td>---</td>{% endif %}
+                        {% if data.product_color %}<td> {{ data.product_color }} </td>{% else %}<td>---</td>{% endif %}
+                        <td> {{ data.available_quantity }} </td>
+                        <td> {{ data.total_quantity }} </td>
+                        <td> {{ data.unit_price }} </td>
+                        <td> {{ data.total_price }} </td>
+                        <td> {{ data.buy_price }} </td>
+                        {% if data.discount %}<td> {{ data.discount }} </td>{% else %}<td>--</td>{% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endif %}
+
+        {% if product_list %}
+            <tbody>
+                {% for data in product_list %}
+                    <tr class="gradeX odd" style="background:white;" role="row">
+                        <td> {{ forloop.counter }} </td>
+                        <td> {{ data.category_name}}</td>
+                        <td> {{ data.product_name }} </td>
+                        {% if data.brand_name %}<td> {{ data.brand_name }} </td>{% else %}<td>---</td>{% endif %}
+                        {% if data.product_model_number %}<td> {{ data.product_model_number }} </td>{% else %}<td>---</td>{% endif %}
+                        {% if data.product_color %}<td> {{ data.product_color }} </td>{% else %}<td>---</td>{% endif %}
+                        <td> {{ data.available_quantity }} </td>
+                        <td> {{ data.total_quantity }} </td>
+                        <td> {{ data.unit_price }} </td>
+                        <td> {{ data.total_price }} </td>
+                        <td> {{ data.buy_price }} </td>
+                        {% if data.discount %}<td> {{ data.discount }} </td>{% else %}<td>--</td>{% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% elif request.POST %}
+            <tbody>
+                <tr class="gradeX odd" style="background:white;" role="row">
+                    <td colspan="12" style="text-align:center;color:red;"><h4>No Product Found</h4></td>
+                </tr>
+            </tbody>
+        {% endif %}
+    </table>
+</div>
+{% endblock %}

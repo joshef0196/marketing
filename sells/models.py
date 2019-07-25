@@ -41,7 +41,7 @@ class Product(models.Model):
     total_price          = models.FloatField(default=0)
     buy_price            = models.FloatField(default=0)
     discount             = models.FloatField(default=0, blank=True)
-    discription          = RichTextField(blank=True)
+    discription          = models.TextField(blank=True)
     status               = models.BooleanField(default=True)
 
     def __str__(self):
@@ -54,10 +54,10 @@ class Product(models.Model):
 class SalesProduct(models.Model):
     salesman             = models.ForeignKey(Registration, on_delete=models.CASCADE)
     product              = models.ForeignKey(Product, on_delete=models.CASCADE)
-    unit_price           = models.FloatField(default=0)
     total_price          = models.FloatField(default=0)
     sale_quantity        = models.IntegerField(default=1)
     discount             = models.FloatField(default=0, blank=True)
+    comment              = models.TextField(blank=True)
     sale_date            = models.DateTimeField(auto_now_add=True)
     status               = models.BooleanField(default=True)
 

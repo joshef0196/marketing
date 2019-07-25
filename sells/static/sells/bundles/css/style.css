@@ -979,3 +979,9 @@ input.checked {
 }
 
 /*--//responsive--*/
+
+.button4 {
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+  }

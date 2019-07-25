@@ -6,11 +6,9 @@ from django.contrib.admin.forms import AdminAuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from sells.utils import render_to_pdf
+from django.http import HttpResponse, JsonResponse
 
-def salesman_dashboard(request):
-    
-    return render(request,'sells/salesman/index.html')
-
+# .............For Admin.................
 def admin_dashboard(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
@@ -81,9 +79,61 @@ def edit_product(request,id):
             unit_price = unit_price, total_quantity = total_quantity, available_quantity = total_quantity, buy_price = buy_price,
             discount = discount, total_price = total_price, discription = discription)
         return redirect("/product-list/")
-
     return render(request,'sells/admin/edit_product.html',context)
+# .................End admin....................
 
+# .................For salesman....................
+def sales_product_list(request):
+    if not request.session['usertype'] == "salesman":
+        return redirect('/')
+    product = models.Product.objects.filter(status = True).order_by("id")
+    context = {
+        'product': product,       
+    }
+    if request.method == "POST":
+        product = request.POST['searchtxt']
+        product_list = models.Product.objects.filter(Q(category_name__category_name__icontains = product)|Q(product_name__icontains = product))
+        return render(request, 'sells/salesman/product_list.html',{'product_list' : product_list})
+
+    return render(request,'sells/salesman/product_list.html',context)
+
+def load_category_product(request):
+    product_list = models.Product.objects.filter(category_name_id = int(request.GET.get('category_id'))).order_by("product_name")
+
+    return render(request, 'sells/salesman/load_product.html',{'product_list':product_list})
+
+def add_selling_product(request):
+    if not request.session['usertype'] == "salesman":
+        return redirect('/')
+    if request.method=="POST":
+        product_cat          = int(request.POST['product_cat'])
+        product_name         = request.POST['product_name']
+        brand_name           = request.POST['brand_name']
+        product_model_number = request.POST['product_model_number']
+        product_color        = request.POST['product_color']
+        unit_price           = request.POST['unit_price']
+        total_quantity       = request.POST['total_quantity']
+        buy_price            = request.POST['buy_price']
+        discount             = request.POST['discount']
+        discription          = request.POST['discription']
+        total_price          = round((int(total_quantity)*float(unit_price)),2)
+        
+        models.Product.objects.filter(id = id).update(category_name_id = product_cat, product_name = product_name, brand_name = brand_name, product_model_number = product_model_number,product_color = product_color,
+            unit_price = unit_price, total_quantity = total_quantity, available_quantity = total_quantity, buy_price = buy_price,
+            discount = discount, total_price = total_price, discription = discription)
+        return redirect("/product-list/")
+
+    if request.is_ajax():
+        product = models.Product.objects.values().filter(id = int(request.GET.get('product_id'))).first()
+        return JsonResponse(product, safe = False, content_type='application/json; charset=utf8')
+
+    product_list = models.ProductCat.objects.all().order_by("category_name")
+    context = {
+        'product_list': product_list,       
+    }
+    return render(request,'sells/salesman/add_product.html',context)
+
+# .................End salesman....................
 
 def registration(request):
     if not request.session['usertype'] == "admin":
@@ -120,7 +170,7 @@ def login(request):
             if user:
                 request.session['user'] = user[0].name
                 request.session['usertype'] = 'salesman'
-                return redirect("/dashboard/")
+                return redirect("/all-product-list/")
     return render(request,'sells/page_login.html')
     
 def logout(request):  

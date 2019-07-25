@@ -18,7 +18,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter     = ['category_name','product_name','status']
 
 class SalesProductAdmin(admin.ModelAdmin):
-    list_display    = ['salesman','salesman','unit_price','sale_quantity','discount','sale_date','status']
+    list_display    = ['salesman','salesman','sale_quantity','discount','sale_date','status']
     search_fields   = ['salesman_name','product_product_name','unit_price','status']
     list_filter     = ['salesman','salesman','status']
 
