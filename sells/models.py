@@ -56,7 +56,7 @@ class SalesProduct(models.Model):
     product              = models.ForeignKey(Product, on_delete=models.CASCADE)
     total_price          = models.FloatField(default=0)
     sale_quantity        = models.IntegerField(default=1)
-    discount             = models.FloatField(default=0, blank=True)
+    discount             = models.FloatField(default=0)
     comment              = models.TextField(blank=True)
     sale_date            = models.DateTimeField(auto_now_add=True)
     status               = models.BooleanField(default=True)

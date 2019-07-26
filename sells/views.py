@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from sells.utils import render_to_pdf
 from django.http import HttpResponse, JsonResponse
-
+import datetime
+from django.utils.dateparse import parse_date, parse_datetime
 # .............For Admin.................
 def admin_dashboard(request):
     if not request.session['usertype'] == "admin":
@@ -106,22 +107,21 @@ def add_selling_product(request):
     if not request.session['usertype'] == "salesman":
         return redirect('/')
     if request.method=="POST":
-        product_cat          = int(request.POST['product_cat'])
-        product_name         = request.POST['product_name']
-        brand_name           = request.POST['brand_name']
-        product_model_number = request.POST['product_model_number']
-        product_color        = request.POST['product_color']
-        unit_price           = request.POST['unit_price']
-        total_quantity       = request.POST['total_quantity']
-        buy_price            = request.POST['buy_price']
-        discount             = request.POST['discount']
-        discription          = request.POST['discription']
-        total_price          = round((int(total_quantity)*float(unit_price)),2)
-        
-        models.Product.objects.filter(id = id).update(category_name_id = product_cat, product_name = product_name, brand_name = brand_name, product_model_number = product_model_number,product_color = product_color,
-            unit_price = unit_price, total_quantity = total_quantity, available_quantity = total_quantity, buy_price = buy_price,
-            discount = discount, total_price = total_price, discription = discription)
-        return redirect("/product-list/")
+        product_id          = int(request.POST['product_name'])
+        sell_quantity        = request.POST['sell_quantity']
+        given_discount       = request.POST['given_discount']
+        total_price          = request.POST['total_price']
+        comment              = request.POST['comment']
+        if given_discount not in request.POST: 
+            given_discount = 0
+            
+        if models.SalesProduct.objects.create(
+            salesman_id = int(request.session['usertype'] == "salesman"),product_id = product_id, sale_quantity = sell_quantity,
+            discount = given_discount, total_price = total_price, comment = comment):
+            models.Product.objects.filter(id = product_id).update(available_quantity = F('available_quantity') - sell_quantity)
+            messages.success(request,"Success!") 
+        else:
+            messages.warning(request,"Mobile number is already exits!")
 
     if request.is_ajax():
         product = models.Product.objects.values().filter(id = int(request.GET.get('product_id'))).first()
@@ -169,6 +169,7 @@ def login(request):
             user  = models.Registration.objects.filter(mobile = username, password = password)
             if user:
                 request.session['user'] = user[0].name
+                request.session['salesman_id'] = user[0].id
                 request.session['usertype'] = 'salesman'
                 return redirect("/all-product-list/")
     return render(request,'sells/page_login.html')
@@ -180,8 +181,8 @@ def logout(request):
 
 
 def daily_report(request):
-    
-    pdf = render_to_pdf('sells/admin/daily_report.html')
+    daily_sell = models.SalesProduct.objects.filter(sale_date__date__gte = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), sale_date__date__lte = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
+    pdf = render_to_pdf('sells/admin/daily_report.html', {"daily_sell":daily_sell})
     return HttpResponse(pdf, content_type='application/pdf')
 
 def weekly_report(request):

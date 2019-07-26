@@ -18,23 +18,21 @@
             <thead>
                 <tr>
                     <th style="width:40px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">SL</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Customer name</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Product Name</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Salesman</th>
                     <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Category</th>
+                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Product Name</th>
                     <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Price</th>
                     <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Quantity</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Payment Type</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Payment Number</th>
-                    <th style="width:60px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Order Date</th>
+                    <th style="width:60px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Sales Date</th>
                 </tr>
             </thead>
             <tbody>
 
-            {% for st in order_list %}
+            {% for st in daily_sell %}
                 <tr class="gradeX odd" role="row">
                     <td style="text-align:center;font-size:10px;padding-top:3px"> {{ forloop.counter }} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px;padding-left:3px">  {{st.customer_name}}</td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{st.product_name }} </td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px;padding-left:3px">  {{st.salesman}}</td>
+                    <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{st.product_id_ }} </td>
                     <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.category}} </td>
                     <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.price}} </td>
                     <td style="text-align:center;font-size:10px;padding-top:3px"> {{st.quantity}} </td>
