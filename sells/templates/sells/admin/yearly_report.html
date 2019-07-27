@@ -1,6 +1,6 @@
 <html>
      <head>
-         <title>Monthly Report</title>
+         <title>Yearly Report</title>
          <meta charset="utf-8" />
      </head>
      <body>
@@ -9,7 +9,7 @@
             <tr>
                 <td style="width:100%; margin-left:-90px;">
                     <h1 style="margin:0px;text-align:center;padding-top:30px;font-size:24px;">RanaShop</h1>
-                    <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">Monthly Report</h4>
+                    <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">Yearly Report</h4>
                 </td>
             </tr>
         </table>
@@ -30,7 +30,7 @@
             </thead>
             <tbody>
 
-            {% for data in monthly_sell %}
+            {% for data in yearly_sell %}
                 <tr class="gradeX odd" role="row">
                     <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
                     <td style="text-align:center;font-size:11px;padding-top:3px;padding-left:3px;color:green;">{{data.salesman}}</td>

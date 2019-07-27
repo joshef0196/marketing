@@ -19,7 +19,8 @@ urlpatterns = [
 
     #.................... Report.....................
     path('daily-report/', views.daily_report),
-    path('weekly-report/', views.weekly_report),
+    path('yearly-report/', views.yearly_report),
     path('monthly-report/', views.monthly_report),
+    path('date-wise-report/', views.date_to_date_report),
 
 ]

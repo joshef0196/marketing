@@ -5,9 +5,10 @@
     <div class="row">
         <div class="col-md-10">
             {% if messages %}
-                <div class="messages">
+                <div class="messages alert alert-success show">
                     {% for message in messages %}
-                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }}</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;
                     {% endfor %}
                 </div>
             {% endif %}

@@ -1,0 +1,22 @@
+{% extends 'sells/admin/base.html' %}
+{% block title %} Date to Date Report {% endblock %}
+{% load staticfiles %}
+{% block contain %}
+<div class="row">
+    <h3 style="text-align: center;">Date Wise Sales Report </h3>
+    <form method="POST" target="_blank"> {% csrf_token %}
+        <div class="col-md-5">
+            From Date: <input type="date"  name="from_date" {% if from_date %} value="{{ from_date|date:"Y-m-d" }}" {% else %} value="{% now "Y-m-d" %}"  {% endif %} required> 
+        </div>
+        <div class="col-md-5">
+            To Date Date: <input type="date"  name="to_date" {% if to_date %} value="{{ to_date|date:"Y-m-d" }}" {% else %} value="{% now "Y-m-d" %}"  {% endif %} required>
+        </div>
+        <div class="col-md-2">
+            <input type="submit" Value="Search" class="btn btn-info">
+        </div>
+    </form>
+    {% if not date_to_date_sell and request.POST %}
+        <h2>Data Not Found </h2>
+    {% endif %}
+</div>
+{% endblock %}

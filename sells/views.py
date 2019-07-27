@@ -81,6 +81,39 @@ def edit_product(request,id):
             discount = discount, total_price = total_price, discription = discription)
         return redirect("/product-list/")
     return render(request,'sells/admin/edit_product.html',context)
+
+def daily_report(request):
+    daily_sell = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
+    pdf = render_to_pdf('sells/admin/daily_report.html', {"daily_sell":daily_sell})
+    return HttpResponse(pdf, content_type='application/pdf')
+
+def monthly_report(request):
+    monthly_sell = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month)
+    pdf = render_to_pdf('sells/admin/monthly_report.html', {"monthly_sell":monthly_sell})
+    return HttpResponse(pdf, content_type='application/pdf') 
+
+def yearly_report(request):
+    yearly_sell = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year)
+    pdf = render_to_pdf('sells/admin/yearly_report.html', {"yearly_sell":yearly_sell})
+    return HttpResponse(pdf, content_type='application/pdf')
+
+def date_to_date_report(request):
+    if request.method == "POST":
+        from_date = parse_date(request.POST['from_date'])
+        to_date   = parse_date(request.POST['to_date'])
+        date_to_date_sell = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True )
+        context = {
+            'from_date':from_date,
+            'to_date':to_date,
+            "date_to_date_sell":date_to_date_sell
+        } 
+        if date_to_date_sell:
+            pdf = render_to_pdf('sells/admin/date_to_date_pdf.html', context)
+            return HttpResponse(pdf, content_type='application/pdf')
+        else:    
+            return render(request,'sells/admin/date_to_date_report.html', context)
+    return render(request,'sells/admin/date_to_date_report.html')
+
 # .................End admin....................
 
 # .................For salesman....................
@@ -116,7 +149,7 @@ def add_selling_product(request):
             given_discount = 0
             
         if models.SalesProduct.objects.create(
-            salesman_id = int(request.session['usertype'] == "salesman"),product_id = product_id, sale_quantity = sell_quantity,
+            salesman_id = int(request.session['salesman_id']),product_id = product_id, sale_quantity = sell_quantity,
             discount = given_discount, total_price = total_price, comment = comment):
             models.Product.objects.filter(id = product_id).update(available_quantity = F('available_quantity') - sell_quantity)
             messages.success(request,"Success!") 
@@ -180,17 +213,4 @@ def logout(request):
     return redirect('/')
 
 
-def daily_report(request):
-    daily_sell = models.SalesProduct.objects.filter(sale_date__date__gte = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), sale_date__date__lte = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
-    pdf = render_to_pdf('sells/admin/daily_report.html', {"daily_sell":daily_sell})
-    return HttpResponse(pdf, content_type='application/pdf')
 
-def weekly_report(request):
-    
-    pdf = render_to_pdf('sells/admin/weekly_report.html')
-    return HttpResponse(pdf, content_type='application/pdf')
-
-def monthly_report(request):
-    
-    pdf = render_to_pdf('sells/admin/monthly_report.html')
-    return HttpResponse(pdf, content_type='application/pdf') 
