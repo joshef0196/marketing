@@ -8,14 +8,14 @@
 			<div class="dashboard_box">
 				<h5> <i class="fa fa-money"></i></h5>
 				<h3>Today Sale</h3>
-				<h4>[ Tk. 2500 ]</h4>
+				<h4>{% if today_sale == none %}[ Tk. 0 ]{% else %}[ Tk. {{ today_sale }} ]{% endif %}</h4>
 			</div>
 		</div>
 		<div class="col-sm-3">
 			<div class="dashboard_box">
 				<h5><span class="fa fa-money"></span></h5>
 				<h3>Today Profit</h3>
-				<h4>[ Tk. 500 ]</h4>
+				<h4>[ Tk. {{today_profit}} ]</h4>
 			</div>
 		</div>
 		<a href="/registration">

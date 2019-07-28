@@ -18,9 +18,15 @@ urlpatterns = [
     path('salesman-registration/',views.registration),
 
     #.................... Report.....................
+    #....For Admin.......#
     path('daily-report/', views.daily_report),
     path('yearly-report/', views.yearly_report),
     path('monthly-report/', views.monthly_report),
     path('date-wise-report/', views.date_to_date_report),
+    path('salesman-wise-report/', views.man_wise_report),
+    #....For Saleman.......#
+    path('my-daily-report/', views.salesman_daily_report),
+    path('my-date-wise-report/', views.salesman_date_to_date_report),
+    
 
 ]

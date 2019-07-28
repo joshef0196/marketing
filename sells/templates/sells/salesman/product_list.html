@@ -24,7 +24,7 @@
                 <div class="actions" style="text-align: right;">
                     <i class="fa fa-hand-o-right"></i>
                     <span class="caption-subject bold" >
-                        <a class="caption-subject bold" style="font-weight: 600 !important;" href="/dashboard/">
+                        <a class="caption-subject bold" style="font-weight: 600 !important;" href="/all-product-list/">
                             Go to Product List
                         </a>
                     </span>
@@ -36,17 +36,17 @@
         <thead>
             <tr>
                 <th class="center"style="width:40px;">SL</th>     
-                <th>Category Name</th>                 
+                <th>Name</th>                 
                 <th>Product Name</th>
                 <th>Brand Name </th>
-                <th>Product Model Number</th>
+                <th style="width:10%;">Product Model</th>
                 <th>Product Color</th>
-                <th style="color:red;">Available Quantity</th>
-                <th style="color:red;">Total Quantity</th>
+                <th style="width:10%;">Available Quantity</th>
                 <th>Unit Price</th>
+                <th>Quantity</th>
                 <th>Total Price</th>
-                <th>Buy Price</th>
                 <th>Discount</th>
+                <th>Sales Date</th>
             </tr>
         </thead>
         {% if product %}
@@ -54,17 +54,17 @@
                 {% for data in product %}
                     <tr class="gradeX odd" style="background:white;" role="row">
                         <td> {{ forloop.counter }} </td>
-                        <td> {{ data.category_name}}</td>
-                        <td> {{ data.product_name }} </td>
-                        {% if data.brand_name %}<td> {{ data.brand_name }} </td>{% else %}<td>---</td>{% endif %}
-                        {% if data.product_model_number %}<td> {{ data.product_model_number }} </td>{% else %}<td>---</td>{% endif %}
-                        {% if data.product_color %}<td> {{ data.product_color }} </td>{% else %}<td>---</td>{% endif %}
-                        <td> {{ data.available_quantity }} </td>
-                        <td> {{ data.total_quantity }} </td>
-                        <td> {{ data.unit_price }} </td>
+                        <td> {{ data.salesman}}</td>
+                        <td> {{ data.product.product_name }} </td>
+                        {% if data.product.brand_name %}<td> {{ data.product.brand_name }} </td>{% else %}<td>---</td>{% endif %}
+                        {% if data.product.product_model_number %}<td> {{ data.product.product_model_number }} </td>{% else %}<td>---</td>{% endif %}
+                        {% if data.product.product_color %}<td> {{ data.product.product_color }} </td>{% else %}<td>---</td>{% endif %}
+                        <td style="text-align:center;color:red;"> {{ data.product.available_quantity }} </td>
+                        <td > {{ data.product.unit_price }} </td>
+                        <td style="text-align:center;"> {{ data.sale_quantity }} </td>
                         <td> {{ data.total_price }} </td>
-                        <td> {{ data.buy_price }} </td>
-                        {% if data.discount %}<td> {{ data.discount }} </td>{% else %}<td>--</td>{% endif %}
+                        {% if data.discount %}<td> {{ data.discount }} </td>{% else %}<td style="text-align:center;">--</td>{% endif %}
+                        <td> {{ data.sale_date }} </td>
                     </tr>
                 {% endfor %}
             </tbody>

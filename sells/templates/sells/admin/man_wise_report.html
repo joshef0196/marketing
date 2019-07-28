@@ -1,17 +1,31 @@
 {% extends 'sells/admin/base.html' %}
-{% block title %} Date to Date Report {% endblock %}
+{% block title %} Salesman Report {% endblock %}
 {% load staticfiles %}
 {% block contain %}
+
 <div class="banner-section">
-    <form  method="post" target="_blank"> {% csrf_token %}
+    <form  method="post" target="_blank_"> {% csrf_token %}
         <div class="banner-grids">
             <div class="row">
-                <div class="col-md-5 banner-grid sel">
+                <div class="col-md-4 banner-grid">
+                    <select name="salesman" class="salesman">
+                        {% for data in salesman_list %}
+                            {% if salesman_id == data.id %}
+                                <option  value="{{ data.id}}" seleted>{{ data.name}}</option>
+                            {% else %}
+                                <option  value="{{ data.id}}">{{ data.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>							
+                </div>
+                <div class="col-md-3 banner-grid">
                     <input type="date" class="salesman" title="From Date" name="from_date" {% if from_date %} value="{{ from_date|date:"Y-m-d" }}" {% else %} value="{% now "Y-m-d" %}"  {% endif %} required> 
                 </div>
-                <div class="col-sm-5 banner-grid sel">
+
+                <div class="col-sm-3 banner-grid">
                     <input type="date" class="salesman" title="To Date" name="to_date" {% if to_date %} value="{{ to_date|date:"Y-m-d" }}" {% else %} value="{% now "Y-m-d" %}"  {% endif %} required>
                 </div>
+                
                 <div class="col-sm-2 search">
                     <input type="submit" value="Search">
                 </div>

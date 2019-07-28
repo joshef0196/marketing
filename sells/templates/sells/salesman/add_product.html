@@ -98,7 +98,7 @@
                             <tr>
                                 <td class="label_center">Sales Quantity</td>
                                 <td>
-                                    <input type="number" id="sales_quantity" placeholder="Quantity" name="sell_quantity" class="form-control select" required>
+                                    <input type="number" id="sales_quantity" placeholder="Quantity" value="1" name="sell_quantity" class="form-control select" required>
                                 </td>
                             </tr>
 
@@ -180,12 +180,15 @@
                 'product_id': $('#product_id :selected').val(),
             },
             success: function (data) {
-                $("#product_brand").val(data.brand_name);
-                $("#product_model").val(data.product_model_number);
-                $("#product_color").val(data.product_color);
-                $("#unit_price").val(data.unit_price);
-                $("#available_quantity").val(data.available_quantity);
-                $("#maximum_discount").val(data.discount);
+                if (data == "not_found") alert("No product available");
+                else {
+                    $("#product_brand").val(data.brand_name);
+                    $("#product_model").val(data.product_model_number);
+                    $("#product_color").val(data.product_color);
+                    $("#unit_price").val(data.unit_price);
+                    $("#available_quantity").val(data.available_quantity);
+                    $("#maximum_discount").val(data.discount);
+                }
             }
         });
     });

@@ -1820,3 +1820,69 @@ hr {
   border: 0; 
   border-top: 1px solid #eee;
 }
+
+/* search */
+.banner-section {
+	background-size:cover;
+	text-align:center;
+	-webkit-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    -moz-background-size: cover;
+}
+.banner-grids {
+  background: rgba(224, 192, 194, 0.8);
+  width: 100%;
+  padding: 1em;
+}
+
+@media(max-width:1024px){
+  .banner-grids {
+    padding: 2em 1em 2em 2em;
+  }
+}
+
+@media(max-width:991px){
+  .banner-grid {
+    float: left;
+    width: 18%;
+  }
+  .banner-grids {
+    padding: 2em 1em 2em 2em;
+  }
+}
+.sel {
+  width: 100%;
+  padding: .3em 1em;
+  font-size: 1em;
+  outline: none;
+  text-transform: capitalize;
+  border: 1px solid #BBBBBB;
+}
+.sel {
+  width: 25%;
+  padding: .3em 1em;
+  font-size: 1em;
+  outline: none;
+  text-transform: capitalize;
+  border: 0px solid #BBBBBB;
+}
+.salesman {
+  width: 100%;
+  padding: .3em 1em;
+  font-size: 1em;
+  outline: none;
+  text-transform: capitalize;
+  border: 0px solid #BBBBBB;
+}
+.search input[type="submit"] {
+  width: 100%;
+  background: #062f3c;
+  border: none;
+  outline: none;
+  color: #fff;
+  padding: .4em;
+}
+.search {
+  margin: 0em auto;
+}

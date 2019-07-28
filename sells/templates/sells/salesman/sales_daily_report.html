@@ -1,15 +1,15 @@
 <html>
-    <head>
-    <title>Search :-{% if date_to_date_sell %} {{ from_date }} To {{ to_date }} {% else %}Location not found  {% endif %}</title>       
-    <meta charset="utf-8" />
-    </head>
-    <body>
+     <head>
+         <title>My Daily Report</title>
+         <meta charset="utf-8" />
+     </head>
+     <body>
       <div class='wrapper'> 
         <table style="background-color: #eee;">
             <tr>
                 <td style="width:100%; margin-left:-90px;">
                     <h1 style="margin:0px;text-align:center;padding-top:30px;font-size:24px;">RanaShop</h1>
-                    <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">Date Wise Report</h4>
+                    <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">Daily Report</h4>
                 </td>
             </tr>
         </table>
@@ -30,7 +30,7 @@
             </thead>
             <tbody>
 
-            {% for data in date_to_date_sell %}
+            {% for data in daily_sell %}
                 <tr class="gradeX odd" role="row">
                     <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
                     <td style="text-align:center;font-size:11px;padding-top:3px;padding-left:3px;color:green;">{{data.salesman}}</td>
