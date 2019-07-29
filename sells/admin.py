@@ -22,7 +22,13 @@ class SalesProductAdmin(admin.ModelAdmin):
     search_fields   = ['salesman_name','product_product_name','unit_price','status']
     list_filter     = ['salesman','salesman','status']
 
+class ContentAdmin(admin.ModelAdmin):
+    list_display    = ['com_name','staring_year','status']
+    search_fields   = ['com_name','status']
+    list_filter     = ['com_name','status']
+
 admin.site.register(models.Registration,RegistrationAdmin)
 admin.site.register(models.ProductCat,ProductCatAdmin)
 admin.site.register(models.Product,ProductAdmin)
 admin.site.register(models.SalesProduct,SalesProductAdmin)
+admin.site.register(models.Content,ContentAdmin)

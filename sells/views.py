@@ -9,7 +9,9 @@ from django.contrib.auth.hashers import check_password
 from sells.utils import render_to_pdf
 from django.http import HttpResponse, JsonResponse
 import datetime
+import hashlib, socket
 from django.utils.dateparse import parse_date, parse_datetime
+
 # .............For Admin.................
 def admin_dashboard(request):
     if not request.session['usertype'] == "admin":
@@ -17,7 +19,7 @@ def admin_dashboard(request):
     today_sale    = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('total_price'))['total_price__sum']
     today_pro_buy = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
     today_profit = 0
-    if today_profit:
+    if today_profit :
         today_profit = today_sale - today_pro_buy
 
     context={
@@ -99,21 +101,24 @@ def daily_report(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
     daily_sell = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
-    pdf = render_to_pdf('sells/admin/daily_report.html', {"daily_sell":daily_sell})
+    company    = models.Content.objects.filter(status = True).first()
+    pdf = render_to_pdf('sells/admin/daily_report.html', {"daily_sell":daily_sell, "company":company})
     return HttpResponse(pdf, content_type='application/pdf')
 
 def monthly_report(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
     monthly_sell = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month)
-    pdf = render_to_pdf('sells/admin/monthly_report.html', {"monthly_sell":monthly_sell})
+    company      = models.Content.objects.filter(status = True).first()
+    pdf = render_to_pdf('sells/admin/monthly_report.html', {"monthly_sell":monthly_sell, "company":company})
     return HttpResponse(pdf, content_type='application/pdf') 
 
 def yearly_report(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
     yearly_sell = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year)
-    pdf = render_to_pdf('sells/admin/yearly_report.html', {"yearly_sell":yearly_sell})
+    company     = models.Content.objects.filter(status = True).first()
+    pdf = render_to_pdf('sells/admin/yearly_report.html', {"yearly_sell":yearly_sell, "company":company})
     return HttpResponse(pdf, content_type='application/pdf')
 
 def date_to_date_report(request):
@@ -123,10 +128,12 @@ def date_to_date_report(request):
         from_date = parse_date(request.POST['from_date'])
         to_date   = parse_date(request.POST['to_date'])
         date_to_date_sell = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True )
+        company           = models.Content.objects.filter(status = True).first()
         context = {
             'from_date':from_date,
             'to_date':to_date,
-            "date_to_date_sell":date_to_date_sell
+            "date_to_date_sell":date_to_date_sell,
+            "company":company
         }
         if date_to_date_sell:
             pdf = render_to_pdf('sells/admin/date_to_date_pdf.html', context)
@@ -144,22 +151,25 @@ def man_wise_report(request):
         from_date    = parse_date(request.POST['from_date'])
         to_date      = parse_date(request.POST['to_date'])
         date_to_date_sell = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True )
+        company           = models.Content.objects.filter(status = True).first()
         context = {
             'from_date':from_date,
             'to_date':to_date,
             'date_to_date_sell':date_to_date_sell,
+            'company':company,
+            'salesman_id':salesman_id
         }
         if date_to_date_sell:      
             pdf = render_to_pdf('sells/admin/man_wise_report_pdf.html',context)
             return HttpResponse(pdf, content_type='application/pdf')
         else:
             context = {
-            'from_date':from_date,
-            'to_date':to_date,
-            'date_to_date_sell':date_to_date_sell,
-            'salesman_list':salesman_list,
-            'salesman_id':salesman_id,
-        }
+                'from_date':from_date,
+                'to_date':to_date,
+                'date_to_date_sell':date_to_date_sell,
+                'salesman_list':salesman_list,
+                'salesman_id':salesman_id,
+            }
         return render(request,'sells/admin/man_wise_report.html',context)
     return render(request,'sells/admin/man_wise_report.html',{"salesman_list" : salesman_list})
 
@@ -224,21 +234,24 @@ def salesman_daily_report(request):
         return redirect('/')
 
     daily_sell = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), salesman = request.session['salesman_id'] , status=True )
-    pdf = render_to_pdf('sells/salesman/sales_daily_report.html', {"daily_sell":daily_sell})
+    company = models.Content.objects.filter(status = True).first()
+    pdf = render_to_pdf('sells/salesman/sales_daily_report.html', {"daily_sell":daily_sell, "company":company})
     return HttpResponse(pdf, content_type='application/pdf')
 
 def salesman_date_to_date_report(request):
     if not request.session['usertype'] == "salesman":
         return redirect('/')
-
+    
     if request.method == "POST":
         from_date = parse_date(request.POST['from_date'])
         to_date   = parse_date(request.POST['to_date'])
         date_to_date_sell = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, salesman = request.session['salesman_id'], status=True  )
+        company = models.Content.objects.filter(status = True).first()
         context = {
             'from_date':from_date,
             'to_date':to_date,
-            "date_to_date_sell":date_to_date_sell
+            "date_to_date_sell":date_to_date_sell,
+            "company":company
         }
         if date_to_date_sell:
             pdf = render_to_pdf('sells/salesman/salesman_date_to_date_pdf.html', context)
@@ -261,17 +274,25 @@ def registration(request):
 
         chk_user = models.Registration.objects.filter(mobile = mobile)
         if not chk_user:
-            models.Registration.objects.create(name = name, email = email, mobile = mobile, password = mobile, address = address)
-            messages.success(request,"Success!") 
+            new_md5_obj     = hashlib.md5(mobile.encode())
+            new_enc_pass    = new_md5_obj.hexdigest()
+            models.Registration.objects.create(name = name, email = email, mobile = mobile, password = new_enc_pass, address = address)
+            messages.success(request,"Success!")
+            return redirect('/salesman-registration/') 
         else:
             messages.warning(request,"Mobile number is already exits!")    
         
     return render(request,'sells/admin/registration.html')
 
 def login(request):
+    company = models.Content.objects.filter(status = True).first()
+    context ={
+        'company':company
+    }
     if request.method=="POST":
         username  = request.POST['username']
         password  = request.POST['password']
+
         user      = User.objects.filter(username=username).first()
         if user:
             pwd_valid = check_password(password, user.password)
@@ -280,18 +301,40 @@ def login(request):
                 request.session['usertype'] = 'admin'
                 return redirect("/admin-dashboard/")
         else:
-            user  = models.Registration.objects.filter(mobile = username, password = password)
+            new_md5_obj = hashlib.md5(password.encode())
+            enc_pass    = new_md5_obj.hexdigest()
+            user  = models.Registration.objects.filter(mobile = username, password = enc_pass)
             if user:
                 request.session['user'] = user[0].name
                 request.session['salesman_id'] = user[0].id
                 request.session['usertype'] = 'salesman'
                 return redirect("/all-product-list/")
-    return render(request,'sells/page_login.html')
+    return render(request,'sells/page_login.html',context)
     
 def logout(request):  
     request.session['user'] = False
     request.session['usertype'] = False
     return redirect('/')
 
+def change_password(request):
+    company = models.Content.objects.filter(status = True).first()
+    context ={
+        'company':company
+    }
+    if request.method == "POST":
+        current_pass = request.POST['current_pass']
+        new_pass     = request.POST['new_pass']
 
+        new_md5_obj = hashlib.md5(current_pass.encode())
+        new_enc_pass = new_md5_obj.hexdigest()
+        chk_user     = models.Registration.objects.filter(id = request.session['salesman_id'], password = new_enc_pass)
+        if chk_user:
+            new_md5_obj = hashlib.md5(new_pass.encode())
+            new_enc_pass = new_md5_obj.hexdigest()
+            models.Registration.objects.filter(id = request.session['salesman_id']).update(password = new_enc_pass)
+            messages.success(request,'Your password has been changed.')
+            return redirect("/change-password/")
+        else:
+            messages.warning(request,'Invalid current Password')
 
+    return render(request,'sells/change_password.html',context)

@@ -67,3 +67,16 @@ class SalesProduct(models.Model):
     class Meta:
         verbose_name        ='Sales Product'
         verbose_name_plural ='Sales Products'
+
+class Content(models.Model):
+    com_name         = models.CharField(max_length=100)
+    staring_year     = models.IntegerField()
+    address          = models.TextField(max_length=500, blank=True)
+    status           = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.com_name
+
+    class Meta:
+        verbose_name = 'Content'
+        verbose_name_plural = 'Contents'

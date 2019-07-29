@@ -283,6 +283,11 @@ ul {
     min-height: 100vh;
 }
 
+.back-image1 {
+    background: #d3b5c2;
+    min-height: 100vh;
+}
+
 
 h1.header-w3ls {
     font-size: 66px;
@@ -985,3 +990,24 @@ input.checked {
     color: black;
     border: 2px solid #e7e7e7;
   }
+  
+  .pass_show{position: relative} 
+
+  .pass_show .ptxt { 
+    position: absolute; 
+    top: 50%; 
+    right: 10px; 
+    z-index: 1; 
+    color: #f36c01; 
+    margin-top: -10px; 
+    cursor: pointer; 
+    transition: .3s ease all; 
+  } 
+  
+  .pass_show .ptxt:hover{color: #333333;} 
+
+.main label{
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}

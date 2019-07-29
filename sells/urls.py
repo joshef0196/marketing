@@ -4,6 +4,7 @@ from django.urls import path
 urlpatterns = [
     path('',views.login),
     path('logout/',views.logout),
+    path('change-password/',views.change_password),
 
     #.............. for salesman.................
     path('all-product-list/',views.sales_product_list),

@@ -8,9 +8,9 @@
             <h3 style="text-align: center;">Registration Form</h3>
             <div class="tab-content">
                 {% if messages %}
-                    <div class="messages">
+                    <div class="messages alert alert-success show">
                         {% for message in messages %}
-                            <p style="font-size:20px; color:red;"{% if message.tags %} class="{{ message.tags }}"{% endif %}>* {{ message }}</p>
+                            <p style="font-size:20px;"{% if message.tags %} class="{{ message.tags }}"{% endif %}>* {{ message }}</p>
                         {% endfor %}
                     </div>
                 {% endif %}
