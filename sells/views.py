@@ -16,16 +16,23 @@ from django.utils.dateparse import parse_date, parse_datetime
 def admin_dashboard(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
-    today_sale    = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('total_price'))['total_price__sum']
-    today_pro_buy = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
-    today_profit = 0
-    if today_sale :
-        today_profit = today_sale - today_pro_buy
+
+    today_sale       = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('total_price'))['total_price__sum']
+    today_pro_buy    = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
+    total_sale       = models.SalesProduct.objects.filter(status=True).aggregate(Sum('total_price'))['total_price__sum']
+    data_list        = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True)
+    data_list        = models.SalesProduct.objects.raw('SELECT (select sum(pp.buy_price * s.sale_quantity) from sells_salesproduct s inner join sells_product pp on pp.id = s.product_id WHERE pp.id = sp.product_id and DATE(s.sale_date) = %s) as buy_price FROM sells_salesproduct sp inner join sells_product p on p.id = sp.product_id WHERE DATE(sp.sale_date) = %s group by sp.product_id', datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
+
+    # today_buy_price = data_list.product[0].buy_price * data_list.sale_quantity
+    # today_profit = 0
+    # if today_buy_price :
+    #     today_profit    = data_list.total_price - today_buy_price
     
     context={
         'today_sale': today_sale,
         'today_pro_buy': today_pro_buy,
-        'today_profit': today_profit,
+        # 'today_profit': today_profit,
+        'total_sale': total_sale,
     }
     return render(request,'sells/admin/index.html',context)
 
@@ -178,8 +185,9 @@ def date_to_date_report(request):
     if request.method == "POST":
         from_date = parse_date(request.POST['from_date'])
         to_date   = parse_date(request.POST['to_date'])
-        date_to_date_sell = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True )
-        company           = models.Content.objects.filter(status = True).first()
+
+        date_to_date_sell      = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True )
+        company                = models.Content.objects.filter(status = True).first()
         today_product_sales    = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
         today_sale             = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('total_price'))['total_price__sum']
         today_pro_buy          = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
@@ -205,6 +213,38 @@ def date_to_date_report(request):
             return render(request,'sells/admin/date_to_date_report.html', context)
     return render(request,'sells/admin/date_to_date_report.html')
 
+def summary_report(request):
+    if not request.session['usertype'] == "admin":
+        return redirect('/')
+        
+    if request.method == "POST":
+        from_date = parse_date(request.POST['from_date'])
+        to_date   = parse_date(request.POST['to_date'])
+
+        company                = models.Content.objects.filter(status = True).first()
+        sale_summary_report    = models.SalesProduct.objects.raw('SELECT sp.id, sp.sale_date as sale_date, sum(sp.total_price) as total_price, sum(sp.sale_quantity) as sale_quantity, sum(sp.discount) as discount, sum(sp.total_buy) as total_buy FROM sells_salesproduct sp inner join sells_product p on p.id = sp.product_id WHERE DATE(sp.sale_date) between %s and %s and sp.status = true group by DATE(sp.sale_date)',[from_date ,to_date])
+        
+        if len(list(sale_summary_report)) > 0:
+            context = {
+                'from_date':from_date,
+                'to_date':to_date,
+                "company":company,
+                'sale_summary_report': sale_summary_report,
+                'sale_summary_count': len(list(sale_summary_report)),
+            }
+            pdf = render_to_pdf('sells/admin/sumarry_report_pdf.html', context)
+            return HttpResponse(pdf, content_type='application/pdf')
+        else:   
+            context = {
+                'from_date':from_date,
+                'to_date':to_date,
+                "company":company,
+                'sale_summary_report': sale_summary_report,
+                'sale_summary_count': len(list(sale_summary_report)),
+            } 
+            return render(request,'sells/admin/summary_report.html', context)
+    return render(request,'sells/admin/summary_report.html')
+
 def man_wise_report(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
@@ -213,8 +253,9 @@ def man_wise_report(request):
         salesman_id  = int(request.POST['salesman'])
         from_date    = parse_date(request.POST['from_date'])
         to_date      = parse_date(request.POST['to_date'])
-        date_to_date_sell = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True )
-        company           = models.Content.objects.filter(status = True).first()
+
+        date_to_date_sell      = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True )
+        company                = models.Content.objects.filter(status = True).first()
 
         today_product_sales    = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True ).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
         today_sale             = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True ).aggregate(Sum('total_price'))['total_price__sum']
@@ -252,6 +293,21 @@ def man_wise_report(request):
 # .................End admin....................
 
 # .................For salesman....................
+def dashboard(request):
+    if not request.session['usertype'] == "salesman":
+        return redirect('/')
+    today_sale          = models.SalesProduct.objects.filter( sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('total_price'))['total_price__sum']
+    total_sale          = models.SalesProduct.objects.filter( salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('total_price'))['total_price__sum']
+    today_sale_product  = models.SalesProduct.objects.filter( sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
+    total_sale_product  = models.SalesProduct.objects.filter( salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
+    context = {
+        'today_sale': today_sale,       
+        'total_sale': total_sale,       
+        'today_sale_product': today_sale_product,       
+        'total_sale_product': total_sale_product,       
+    }
+    return render(request,'sells/salesman/index.html',context)
+
 def sales_product_list(request):
     if not request.session['usertype'] == "salesman":
         return redirect('/')
@@ -276,7 +332,7 @@ def add_selling_product(request):
         return redirect('/')
 
     if request.method=="POST":
-        product_id          = int(request.POST['product_name'])
+        product_id           = int(request.POST['product_name'])
         sell_quantity        = request.POST['sell_quantity']
         given_discount       = request.POST['given_discount']
         total_price          = request.POST['total_price']
@@ -285,8 +341,8 @@ def add_selling_product(request):
         product = models.Product.objects.filter(id = product_id, status = True)
         if product and product[0].available_quantity > 0:
             models.SalesProduct.objects.create(
-            salesman_id = int(request.session['salesman_id']),product_id = product_id, sale_quantity = sell_quantity,
-            discount = given_discount, total_price = total_price, comment = comment)
+                salesman_id = int(request.session['salesman_id']),product_id = product_id, sale_quantity = sell_quantity,
+                discount = given_discount, total_price = total_price, total_buy = product[0].buy_price * float(sell_quantity),  comment = comment)
             product.update(available_quantity = F('available_quantity') - sell_quantity)
             messages.success(request,"Product successfully added")
         else:
@@ -336,6 +392,39 @@ def salesman_date_to_date_report(request):
             return render(request,'sells/salesman/date_to_date_report.html', context)
     return render(request,'sells/salesman/date_to_date_report.html')
 
+def salesman_summary_report(request):
+    if not request.session['usertype'] == "salesman":
+        return redirect('/')
+        
+    if request.method == "POST":
+        from_date = parse_date(request.POST['from_date'])
+        to_date   = parse_date(request.POST['to_date'])
+
+        company                = models.Content.objects.filter(status = True).first()
+        sale_summary_report    = models.SalesProduct.objects.raw('SELECT sp.id, sp.sale_date as sale_date, sum(sp.total_price) as total_price, sum(sp.sale_quantity) as sale_quantity, sum(sp.discount) as discount FROM sells_salesproduct sp inner join sells_product p on p.id = sp.product_id WHERE sp.salesman_id = %s and DATE(sp.sale_date) between %s and %s and sp.status = true group by DATE(sp.sale_date)',[int(request.session['salesman_id']),from_date ,to_date])
+        
+        if len(list(sale_summary_report)) > 0:
+            context = {
+                'from_date':from_date,
+                'to_date':to_date,
+                "company":company,
+                'sale_summary_report': sale_summary_report,
+                'sale_summary_count': len(list(sale_summary_report)),
+            }
+            pdf = render_to_pdf('sells/salesman/sumarry_report_pdf.html', context)
+            return HttpResponse(pdf, content_type='application/pdf')
+        else: 
+            context = {
+                'from_date':from_date,
+                'to_date':to_date,
+                "company":company,
+                'sale_summary_report': sale_summary_report,
+                'sale_summary_count': len(list(sale_summary_report)),
+            }   
+            return render(request,'sells/salesman/summary_report.html', context)
+    return render(request,'sells/salesman/summary_report.html')
+
+
 # .................End salesman....................
 
 def registration(request):
@@ -384,7 +473,7 @@ def login(request):
                 request.session['user'] = user[0].name
                 request.session['salesman_id'] = user[0].id
                 request.session['usertype'] = 'salesman'
-                return redirect("/all-product-list/")
+                return redirect("/dashboard/")
     return render(request,'sells/page_login.html',context)
     
 def logout(request):  

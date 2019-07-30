@@ -1,0 +1,27 @@
+{% extends 'sells/salesman/base.html' %}
+{% block title %} My Summary Report {% endblock %}
+{% load staticfiles %}
+{% block contain %}
+<div class="banner-section">
+    <form  method="post" target="_blank"> {% csrf_token %}
+        <div class="banner-grids">
+            <div class="row">
+                <div class="col-md-5 banner-grid sel">
+                    <input type="date" class="salesman" title="From Date" name="from_date" {% if from_date %} value="{{ from_date|date:"Y-m-d" }}" {% else %} value="{% now "Y-m-d" %}"  {% endif %} required> 
+                </div>
+                <div class="col-sm-5 banner-grid sel">
+                    <input type="date" class="salesman" title="To Date" name="to_date" {% if to_date %} value="{{ to_date|date:"Y-m-d" }}" {% else %} value="{% now "Y-m-d" %}"  {% endif %} required>
+                </div>
+                <div class="col-sm-2 search">
+                    <input type="submit" value="Search">
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </form>
+    {% if not sale_summary_count and request.POST %}
+        <h3>No Data Found </h3>
+    {% endif %}
+</div>
+
+{% endblock %}

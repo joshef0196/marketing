@@ -7,6 +7,7 @@ urlpatterns = [
     path('change-password/',views.change_password),
 
     #.............. for salesman.................
+    path('dashboard/',views.dashboard),
     path('all-product-list/',views.sales_product_list),
     path('add-sales-product/',views.add_selling_product),
     path('category/product-load/',views.load_category_product),
@@ -25,9 +26,11 @@ urlpatterns = [
     path('monthly-report/', views.monthly_report),
     path('date-wise-report/', views.date_to_date_report),
     path('salesman-wise-report/', views.man_wise_report),
+    path('report-summary/', views.summary_report),
     #....For Saleman.......#
     path('my-daily-report/', views.salesman_daily_report),
     path('my-date-wise-report/', views.salesman_date_to_date_report),
+    path('my-summary-report/', views.salesman_summary_report),
     
 
 ]

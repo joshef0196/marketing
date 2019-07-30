@@ -1,5 +1,5 @@
-{% extends 'sells/admin/base.html' %}
-{% block title %} Admin Dashboard  {% endblock %}
+{% extends 'sells/salesman/base.html' %}
+{% block title %} Dashboard{% endblock title %}
 {% load staticfiles %}
 {% block contain %}
 <div class="panel-headline">
@@ -7,40 +7,33 @@
 		<div class="col-sm-3">
 			<div class="dashboard_box">
 				<h5> <i class="fa fa-money"></i></h5>
-				<h3>Today Sale</h3>
+				<h3>Today Sale Amount</h3>
 				<h4>{% if today_sale == none %}[ Tk. 0 ]{% else %}[ Tk. {{ today_sale }} ]{% endif %}</h4>
 			</div>
 		</div>
+		
 		<div class="col-sm-3">
 			<div class="dashboard_box">
-				<h5><span class="fa fa-credit-card-alt"></span></h5>
-				<h3>Today Profit</h3>
-				<h4>[ Tk. {{ today_profit }} ]</h4>
+				<h5> <i class="fa fa-sellsy"></i></h5>
+				<h3>Today Sale Product</h3>
+				<h4>{% if today_sale_product == none %}[ 0 ]{% else %}[ {{ today_sale_product }} ]{% endif %}</h4>
 			</div>
 		</div>
 
 		<div class="col-sm-3">
 			<div class="dashboard_box">
-				<h5> <i class="fa fa-usd"></i></h5>
+				<h5> <i class="fa fa-money"></i></h5>
 				<h3>Total Sale</h3>
 				<h4>{% if total_sale == none %}[ Tk. 0 ]{% else %}[ Tk. {{ total_sale }} ]{% endif %}</h4>
 			</div>
 		</div>
 		<div class="col-sm-3">
 			<div class="dashboard_box">
-				<h5><span class="fa fa-credit-card-alt"></span></h5>
-				<h3>Total Profit</h3>
-				<h4>[ Tk. {{ today_profit }} ]</h4>
+				<h5> <i class="fa fa-sellsy"></i></h5>
+				<h3>Total Sale Product</h3>
+				<h4>{% if total_sale_product == none %}[ 0 ]{% else %}[ {{ total_sale_product }} ]{% endif %}</h4>
 			</div>
 		</div>
-		<a href="/salesman-registration/">
-			<div class="col-sm-3">
-				<div class="dashboard_box">
-					<h5><span class="fa fa-user-plus"></span></h5>
-					<h3>Create New Account</h3>
-				</div>
-			</div>
-		</a>
 	</div>
 </div>
 {% endblock %}

@@ -1,0 +1,49 @@
+<html>
+    <head>
+    <title>Search :-{% if date_to_date_sell %} {{ from_date }} To {{ to_date }} {% else %}Location not found  {% endif %}</title>       
+    <meta charset="utf-8" />
+    </head>
+    <body>
+        <div class='wrapper'> 
+            <table style="background-color: #eee;">
+                <tr>
+                    <td style="width:100%;">
+                        <h1 style="margin:0px;text-align:center;padding-top:30px;font-size:24px;">{{company.com_name}}</h1>
+                        <h4 style="margin:0px;text-align:center;font-size:12px;">{{ company.address }}</h4>
+                        <h4 style="margin:0px;text-align:center;font-size:12px;">{% if company.email %}{{ company.email }}{% endif %}{% if company.mobile %},{{ company.mobile }}{% endif %}</h4>
+                        <h4 style="margin:0px;text-align:center;font-size:16px;">Summary Report( {{ from_date|date:"d-M" }} To {{ to_date|date:"d-M" }} )</h4>
+                    </td>
+                </tr>
+            </table>
+
+            <table width="100%" style="margin-top:10px;border:1px solid black;">
+                <thead>
+                    <tr>
+                        <th style="width:40px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">SL</th>
+                        <th style="text-align:left;font-size:10px;padding-top:3px;padding-left:3px;background-color:#ddd;width:20%;">Date</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Total Buy</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Total Price</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;padding-right:3px;padding-right:3px;background-color:#ddd;width:20%;">Total Quantity</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Discount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if sale_summary_report %}
+                        {% for data in sale_summary_report %}
+                            <tr class="gradeX odd" role="row">
+                                <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
+                                <td style="text-align:left;font-size:11px;padding-top:3px;padding-left:3px;width:30%;">{{ data.sale_date|date:"dM-Y" }}</td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px;width:20%;"> {{ data.total_buy }} </td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px;width:20%;"> {{ data.total_price }} </td>
+                                <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{ data.sale_quantity }} </td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{ data.discount }} </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                         <td style="text-align:center;font-size:10px;padding-top:3px; color:red;" colspan="9">No Data</td>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+     </body>
+ </html>

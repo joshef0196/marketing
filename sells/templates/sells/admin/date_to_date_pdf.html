@@ -20,30 +20,36 @@
                 <thead>
                     <tr>
                         <th style="width:40px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">SL</th>
-                        <th style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;background-color:#ddd;">Salesman</th>
+                        <th style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;background-color:#ddd;width:30%;">Salesman</th>
                         <th style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;background-color:#ddd;">Category</th>
-                        <th style="text-align:left;font-size:10px;padding-left:3px;padding-top:3px;background-color:#ddd;width:50%;">Product Name</th>
-                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;">Buy Price</th>
-                        <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Quantity</th>
-                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:100px;">Discount</th>
-                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;">Total Price</th>
+                        <th style="text-align:left;font-size:10px;padding-left:3px;padding-top:3px;background-color:#ddd;width:40%;">Product Name</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Buy Price</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Unit Price</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;width:20%;">Quantity</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Discount</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:20%;">Total Price</th>
                         <th style="width:60px;text-align:left;font-size:10px;padding-left:3px;padding-top:3px;background-color:#ddd;width:200px;">Sales Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for data in date_to_date_sell %}
-                        <tr class="gradeX odd" role="row">
-                            <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
-                            <td style="text-align:left;font-size:11px;padding-top:3px;padding-left:3px;">{{data.salesman}}</td>
-                            <td style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;width:20%;"> {{data.product}} </td>
-                            <td style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px"> {{data.product.product_name}} </td>
-                            <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{data.product.buy_price}} </td>
-                            <td style="text-align:center;font-size:10px;padding-top:3px"> {{data.sale_quantity}} </td>
-                            <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{data.discount}} </td>
-                            <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{ data.total_price }} </td>
-                            <td style="text-align:center;font-size:10px;padding-top:3px"> {{ data.sale_date }} </td>
-                        </tr>
-                    {% endfor %}
+                    {% if date_to_date_sell %}
+                        {% for data in date_to_date_sell %}
+                            <tr class="gradeX odd" role="row">
+                                <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
+                                <td style="text-align:left;font-size:11px;padding-top:3px;padding-left:3px;width:30%;">{{data.salesman}}</td>
+                                <td style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;width:20%;"> {{data.product}} </td>
+                                <td style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px"> {{data.product.product_name}} </td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px;width:20%;"> {{data.product.buy_price}} </td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px;width:20%;"> {{data.product.unit_price}} </td>
+                                <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{data.sale_quantity}} </td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{data.discount}} </td>
+                                <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px;width:20%;"> {{ data.total_price }} </td>
+                                <td style="text-align:left;font-size:10px;padding-top:3px;width:50%;padding-left:3px;"> {{ data.sale_date }} </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                         <td style="text-align:center;font-size:10px;padding-top:3px; color:red;" colspan="9">No Data</td>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
