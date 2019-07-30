@@ -4,48 +4,71 @@
     <meta charset="utf-8" />
     </head>
     <body>
-      <div class='wrapper'> 
-        <table style="background-color: #eee;">
-            <tr>
-                <td style="width:100%; margin-left:-90px;">
-                    <h1 style="margin:0px;text-align:center;padding-top:30px;font-size:24px;">{{company.com_name}}</h1>
-                    <h4 style="margin:0px;text-align:center;font-size:12px;">{{ company.address }}</h4>
-                    <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">{{date_to_date_sell.0.salesman}} Sales Report</h4>
-                </td>
-            </tr>
-        </table>
-
-        <table border="0.5" width="100%" style="margin-top:10px">
-            <thead>
+        <div class='wrapper'> 
+            <table style="background-color: #eee;">
                 <tr>
-                    <th style="width:40px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">SL</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Salesman</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Product Category</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Product Name</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Buy Price</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Total Quantity</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;width:100px;">Discount</th>
-                    <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Total Price</th>
-                    <th style="width:60px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;width:200px;">Sales Date</th>
+                    <td style="width:100%;">
+                        <h1 style="margin:0px;text-align:center;padding-top:30px;font-size:24px;">{{company.com_name}}</h1>
+                        <h4 style="margin:0px;text-align:center;font-size:12px;">{{ company.address }}</h4>
+                        <h4 style="margin:0px;text-align:center;font-size:12px;">{% if company.email %}{{ company.email }}{% endif %}{% if company.mobile %},{{ company.mobile }}{% endif %}</h4>
+                        <h4 style="margin:0px;text-align:center;padding-bottom:7px;font-size:16px;color:red;">{{date_to_date_sell.0.salesman}} Sales Report</h4>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
+            </table>
 
-            {% for data in date_to_date_sell %}
-                <tr class="gradeX odd" role="row">
-                    <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
-                    <td style="text-align:center;font-size:11px;padding-top:3px;padding-left:3px;color:green;">{{data.salesman}}</td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{data.product}} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{data.product.product_name}} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{data.product.buy_price}} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{data.sale_quantity}} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{data.discount}} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{ data.total_price }} </td>
-                    <td style="text-align:center;font-size:10px;padding-top:3px"> {{ data.sale_date }} </td>
+            <table width="100%" style="margin-top:10px;border:1px solid black;">
+                <thead>
+                    <tr>
+                        <th style="width:40px;text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">SL</th>
+                        <th style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;background-color:#ddd;">Salesman</th>
+                        <th style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;background-color:#ddd;">Category</th>
+                        <th style="text-align:left;font-size:10px;padding-left:3px;padding-top:3px;background-color:#ddd;width:50%;">Product Name</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;">Buy Price</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;background-color:#ddd;">Quantity</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;width:100px;">Discount</th>
+                        <th style="text-align:right;font-size:10px;padding-top:3px;padding-right:3px;background-color:#ddd;">Total Price</th>
+                        <th style="width:60px;text-align:left;font-size:10px;padding-left:3px;padding-top:3px;background-color:#ddd;width:200px;">Sales Date</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-      </div>
+                </thead>
+                <tbody>
+                    {% for data in date_to_date_sell %}
+                        <tr class="gradeX odd" role="row">
+                            <td style="text-align:center;font-size:10px;padding-top:3px">{{ forloop.counter }}</td>
+                            <td style="text-align:left;font-size:11px;padding-top:3px;padding-left:3px;">{{data.salesman}}</td>
+                            <td style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px;width:20%;"> {{data.product}} </td>
+                            <td style="text-align:left;padding-left:3px;font-size:10px;padding-top:3px"> {{data.product.product_name}} </td>
+                            <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{data.product.buy_price}} </td>
+                            <td style="text-align:center;font-size:10px;padding-top:3px"> {{data.sale_quantity}} </td>
+                            <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{data.discount}} </td>
+                            <td style="text-align:right;font-size:10px;padding-right:3px;padding-top:3px"> {{ data.total_price }} </td>
+                            <td style="text-align:center;font-size:10px;padding-top:3px"> {{ data.sale_date }} </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div> 
+            <table border="0.5" width="100%" style="margin-top:10px;">
+                <thead>
+                    <tr style="border-top:1px solid red;border-top:1px solid red;">
+                        <th style="text-align:center;font-size:10px;padding-top:3px;">Salesman</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;">Product Sales</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;">sells Amount</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;">Given Discount</th>
+                        <th style="text-align:center;font-size:10px;padding-top:3px;">Total Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="gradeX odd" role="row">
+                        <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{date_to_date_sell.0.salesman}} </td>
+                        <td style="text-align:center;font-size:10px;padding-top:3px;width:20%;"> {{ today_product_sales }} </td>
+                        <td style="text-align:center;font-size:10px;padding-top:3px"> {{ today_sale }} </td>
+                        <td style="text-align:center;font-size:10px;padding-top:3px"> {{ today_discount_amount }} </td>
+                        <td style="text-align:center;font-size:10px;padding-top:3px"> {{ today_profit }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
      </body>
  </html>

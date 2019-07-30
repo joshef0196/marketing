@@ -40,7 +40,7 @@ class Product(models.Model):
     unit_price           = models.FloatField(default=0)
     total_price          = models.FloatField(default=0)
     buy_price            = models.FloatField(default=0)
-    discount             = models.FloatField(default=0, blank=True)
+    discount             = models.FloatField("Maximum Discount",default=0, blank=True)
     discription          = models.TextField(blank=True)
     status               = models.BooleanField(default=True)
 
@@ -69,7 +69,10 @@ class SalesProduct(models.Model):
         verbose_name_plural ='Sales Products'
 
 class Content(models.Model):
-    com_name         = models.CharField(max_length=100)
+    com_name         = models.CharField("Company Name",max_length=100)
+    email            = models.CharField(max_length=100, blank=True)
+    mobile           = models.CharField(max_length=50, blank=True)
+    com_logo         = models.ImageField("Company Logo", upload_to="logo", blank=True)
     staring_year     = models.IntegerField()
     address          = models.TextField(max_length=500, blank=True)
     status           = models.BooleanField(default=True)
@@ -78,5 +81,5 @@ class Content(models.Model):
         return self.com_name
 
     class Meta:
-        verbose_name = 'Content'
-        verbose_name_plural = 'Contents'
+        verbose_name = 'Company'
+        verbose_name_plural = 'Company Information'

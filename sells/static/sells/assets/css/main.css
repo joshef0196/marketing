@@ -1886,3 +1886,6 @@ hr {
 .search {
   margin: 0em auto;
 }
+.wrapper1{
+  border: 2px solid red;
+}

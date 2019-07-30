@@ -11,9 +11,9 @@
                     <select name="salesman" class="salesman">
                         {% for data in salesman_list %}
                             {% if salesman_id == data.id %}
-                                <option  value="{{ data.id}}" seleted>{{ data.name}}</option>
+                                <option  value="{{ data.id}}" seleted>{{ data.name }}({{ data.mobile }})</option>
                             {% else %}
-                                <option  value="{{ data.id}}">{{ data.name}}</option>
+                                <option  value="{{ data.id}}">{{ data.name }}({{ data.mobile }})</option>
                             {% endif %}
                         {% endfor %}
                     </select>							
