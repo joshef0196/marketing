@@ -17,22 +17,23 @@ def admin_dashboard(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
 
+    company          = models.Content.objects.filter(status = True).first()
     today_sale       = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('total_price'))['total_price__sum']
     today_pro_buy    = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
     total_sale       = models.SalesProduct.objects.filter(status=True).aggregate(Sum('total_price'))['total_price__sum']
-    data_list        = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True)
-    data_list        = models.SalesProduct.objects.raw('SELECT (select sum(pp.buy_price * s.sale_quantity) from sells_salesproduct s inner join sells_product pp on pp.id = s.product_id WHERE pp.id = sp.product_id and DATE(s.sale_date) = %s) as buy_price FROM sells_salesproduct sp inner join sells_product p on p.id = sp.product_id WHERE DATE(sp.sale_date) = %s group by sp.product_id', datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
-
-    # today_buy_price = data_list.product[0].buy_price * data_list.sale_quantity
-    # today_profit = 0
-    # if today_buy_price :
-    #     today_profit    = data_list.total_price - today_buy_price
+    total_buy        = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('total_buy'))['total_buy__sum']
+    total_price      = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('total_price'))['total_price__sum']
+    # data_list      = models.SalesProduct.objects.raw('SELECT (select sum(pp.buy_price * s.sale_quantity) from sells_salesproduct s inner join sells_product pp on pp.id = s.product_id WHERE pp.id = sp.product_id and DATE(s.sale_date) = %s) as buy_price FROM sells_salesproduct sp inner join sells_product p on p.id = sp.product_id WHERE DATE(sp.sale_date) = %s group by sp.product_id', datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
     
+    if total_price:
+        today_profit= total_price - total_buy
+
     context={
         'today_sale': today_sale,
         'today_pro_buy': today_pro_buy,
-        # 'today_profit': today_profit,
+        'today_profit': today_profit,
         'total_sale': total_sale,
+        'company': company,
     }
     return render(request,'sells/admin/index.html',context)
 
@@ -110,14 +111,15 @@ def daily_report(request):
     daily_sell             = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
     company                = models.Content.objects.filter(status = True).first()
 
-    today_product_sales    = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
-    today_sale             = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('total_price'))['total_price__sum']
-    today_pro_buy          = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
-    today_discount_amount  = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d")).aggregate(Sum('discount'))['discount__sum']
+    today_product_sales    = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
+    today_sale             = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('total_price'))['total_price__sum']
+    today_discount_amount  = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('discount'))['discount__sum']
+    total_buy              = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('total_buy'))['total_buy__sum']
+
     today_profit = 0
-    if today_sale :
-        today_profit = today_sale - today_pro_buy
-    
+    if today_sale:
+        today_profit= today_sale - total_buy
+
     context={
         "daily_sell":daily_sell,
         "company":company,
@@ -132,17 +134,17 @@ def daily_report(request):
 def monthly_report(request):
     if not request.session['usertype'] == "admin":
         return redirect('/')
-    monthly_sell = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month)
-    company      = models.Content.objects.filter(status = True).first()
-
+    monthly_sell           = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month)
+    company                = models.Content.objects.filter(status = True).first()
     today_product_sales    = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month, status = True).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
     today_sale             = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month, status = True).aggregate(Sum('total_price'))['total_price__sum']
-    today_pro_buy          = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month, status = True).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
     today_discount_amount  = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month, status = True).aggregate(Sum('discount'))['discount__sum']
+    total_buy              = models.SalesProduct.objects.filter(sale_date__month = datetime.datetime.now().month, status = True).aggregate(Sum('total_buy'))['total_buy__sum']
+
     today_profit = 0
-    if today_sale :
-        today_profit = today_sale - today_pro_buy
-    
+    if today_sale:
+        today_profit= today_sale - total_buy
+
     context={
         "monthly_sell":monthly_sell,
         "company":company,
@@ -162,12 +164,13 @@ def yearly_report(request):
 
     today_product_sales    = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year, status = True).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
     today_sale             = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year, status = True).aggregate(Sum('total_price'))['total_price__sum']
-    today_pro_buy          = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year, status = True).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
     today_discount_amount  = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year, status = True).aggregate(Sum('discount'))['discount__sum']
+    total_buy              = models.SalesProduct.objects.filter(sale_date__year = datetime.datetime.now().year, status = True).aggregate(Sum('total_buy'))['total_buy__sum']
+
     today_profit = 0
-    if today_sale :
-        today_profit = today_sale - today_pro_buy
-    
+    if today_sale:
+        today_profit= today_sale - total_buy
+
     context={
         "yearly_sell":yearly_sell,
         "company":company,
@@ -190,12 +193,13 @@ def date_to_date_report(request):
         company                = models.Content.objects.filter(status = True).first()
         today_product_sales    = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
         today_sale             = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('total_price'))['total_price__sum']
-        today_pro_buy          = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
         today_discount_amount  = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('discount'))['discount__sum']
+        total_buy              = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date, status=True).aggregate(Sum('total_buy'))['total_buy__sum']
 
         today_profit = 0
-        if today_sale :
-            today_profit = today_sale - today_pro_buy
+        if today_sale:
+            today_profit= today_sale - total_buy
+
         context = {
             'from_date':from_date,
             'to_date':to_date,
@@ -261,10 +265,12 @@ def man_wise_report(request):
         today_sale             = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True ).aggregate(Sum('total_price'))['total_price__sum']
         today_pro_buy          = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True ).aggregate(Sum('product__buy_price'))['product__buy_price__sum']
         today_discount_amount  = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True ).aggregate(Sum('discount'))['discount__sum']
+        total_buy              = models.SalesProduct.objects.filter(sale_date__date__gte = from_date, sale_date__date__lte = to_date,salesman_id = salesman_id, status=True ).aggregate(Sum('total_buy'))['total_buy__sum']
+
         today_profit = 0
-        if today_sale :
-            today_profit = today_sale - today_pro_buy
-    
+        if today_sale:
+            today_profit= today_sale - total_buy
+
         context = {
             'from_date':from_date,
             'to_date':to_date,
@@ -296,6 +302,7 @@ def man_wise_report(request):
 def dashboard(request):
     if not request.session['usertype'] == "salesman":
         return redirect('/')
+    company             = models.Content.objects.filter(status = True).first()
     today_sale          = models.SalesProduct.objects.filter( sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('total_price'))['total_price__sum']
     total_sale          = models.SalesProduct.objects.filter( salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('total_price'))['total_price__sum']
     today_sale_product  = models.SalesProduct.objects.filter( sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), salesman = request.session['salesman_id'] , status=True ).aggregate(Sum('sale_quantity'))['sale_quantity__sum']
@@ -305,6 +312,7 @@ def dashboard(request):
         'total_sale': total_sale,       
         'today_sale_product': today_sale_product,       
         'total_sale_product': total_sale_product,       
+        'company': company,       
     }
     return render(request,'sells/salesman/index.html',context)
 
