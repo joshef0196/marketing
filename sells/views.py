@@ -25,6 +25,7 @@ def admin_dashboard(request):
     total_price      = models.SalesProduct.objects.filter(sale_date__date = datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), status = True).aggregate(Sum('total_price'))['total_price__sum']
     # data_list      = models.SalesProduct.objects.raw('SELECT (select sum(pp.buy_price * s.sale_quantity) from sells_salesproduct s inner join sells_product pp on pp.id = s.product_id WHERE pp.id = sp.product_id and DATE(s.sale_date) = %s) as buy_price FROM sells_salesproduct sp inner join sells_product p on p.id = sp.product_id WHERE DATE(sp.sale_date) = %s group by sp.product_id', datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"), datetime.datetime.strftime(datetime.datetime.now().date(),"%Y-%m-%d"))
     
+    today_profit = 0
     if total_price:
         today_profit= total_price - total_buy
 
@@ -36,6 +37,21 @@ def admin_dashboard(request):
         'company': company,
     }
     return render(request,'sells/admin/index.html',context)
+
+def admin_product_add_cat(request):
+    if not request.session['usertype'] == "admin":
+        return redirect('/')
+
+    if request.method=="POST":
+        product_name         = request.POST['cat_name']
+
+        if models.ProductCat.objects.create( category_name = product_name):
+            return redirect("/product-add/")
+        else:
+            return redirect("/product-category-add/")
+
+    return render(request,'sells/admin/add_product_cat.html')
+
 
 def admin_product_add(request):
     if not request.session['usertype'] == "admin":
@@ -450,7 +466,7 @@ def registration(request):
             new_md5_obj     = hashlib.md5(mobile.encode())
             new_enc_pass    = new_md5_obj.hexdigest()
             models.Registration.objects.create(name = name, email = email, mobile = mobile, password = new_enc_pass, address = address)
-            messages.success(request,"Success!")
+            messages.success(request,"Registration Success!")
             return redirect('/salesman-registration/') 
         else:
             messages.warning(request,"Mobile number is already exits!")    

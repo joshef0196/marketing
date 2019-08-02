@@ -14,6 +14,7 @@ urlpatterns = [
 
     #.............. for admin....................
     path('admin-dashboard/',views.admin_dashboard),
+    path('product-category-add/',views.admin_product_add_cat),
     path('product-add/',views.admin_product_add),
     path('edit/<int:id>/',views.edit_product),
     path('product-list/',views.product_list),

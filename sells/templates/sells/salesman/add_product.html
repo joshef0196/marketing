@@ -154,9 +154,9 @@
     });
 
     $("#discount").change(function() {
-        var one = parseInt($("#total_price").val());
-        var two = parseInt($("#discount").val());
-        $("#total_price").val(one - two);
+        var price = parseInt($("#unit_price").val()) * parseInt($("#sales_quantity").val());
+        price = price - parseFloat($("#discount").val());
+        $("#total_price").val(price);
     });
 
     $('#category_id').change(function(){

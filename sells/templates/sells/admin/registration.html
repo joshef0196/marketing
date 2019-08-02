@@ -5,12 +5,12 @@
 <div class="row">
     <div class="col-md-8">
         <table class="table table-bordered table-striped" id="upload_profile_table" style="background:white;">
-            <h3 style="text-align: center;">Registration Form</h3>
+            <h3 style="text-align: center;">Registration</h3>
             <div class="tab-content">
                 {% if messages %}
                     <div class="messages alert alert-success show">
                         {% for message in messages %}
-                            <p style="font-size:20px;"{% if message.tags %} class="{{ message.tags }}"{% endif %}>* {{ message }}</p>
+                            <label style="color:black;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</label>
                         {% endfor %}
                     </div>
                 {% endif %}

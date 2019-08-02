@@ -1,0 +1,58 @@
+{% extends 'sells/admin/base.html' %}
+{% block title %} Add Product Category {% endblock %}
+{% load staticfiles %}
+{% block contain %}
+    <div class="row">
+        <div class="col-md-10">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <label {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</label>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <a class="caption-subject bold" style="font-weight: 600 !important;" href="/product-add/" >
+                                <i class="fa fa-thumb-tack"></i>
+                                <span class="caption-subject bold">Add Product</span>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="actions" style="text-align: right;">
+                                <i class="fa fa-hand-o-right"></i>
+                                <span class="caption-subject bold" >
+                                    <a class="caption-subject bold" style="font-weight: 600 !important;" href="/product-list/">
+                                        Go to Product List
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div><hr>
+                <div class="portlet-body form">
+                    <form method="post" id="hostel_room" class="form-horizontal"> {% csrf_token %}
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <td class="label_center">Category Name </td>
+                                <td>
+                                    <input type="text" placeholder="Product Category Name" name="cat_name" class="form-control select" required>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input type="submit" value="Save" class="btn btn-success"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
